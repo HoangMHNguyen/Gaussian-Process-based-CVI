@@ -7,8 +7,10 @@ T = 2; (number of outputs)
 Q = 2; (number of Gaussian processes for latent functions)
 
 source: https://linkinghub.elsevier.com/retrieve/pii/S0950705117306123
+Note: there is a notice for visualization, please read it before you plot graphs :) 
 """
 using Pkg
+Pkg.activate("./Thesis_workspace/")
 Pkg.instantiate()
 
 using Plots
@@ -32,6 +34,7 @@ x = collect(0:0.01:5); # 1-D input
 f1 = 2*sin.(x);
 f2 = cos.(x); 
 
+# After optimizing parameters, you can run the code again from here to the beginning of optimizationg section.
 # hyperparameters at the beginning 
 σ_f_val = [0.3, 0.4];# vector of variances for 2 kernels
 l_val = [0.1, 0.01]; # vector of length-scales for 2 kernels 
@@ -146,6 +149,17 @@ log_mll(K,y_observed_resha,A1_val,A2_val,σ_f_val,l_val,σ_n_val)
 σ_f_optim = σ_f_val;
 l_optim = l_val;
 σ_n_optim = σ_n_val;
+
+"""  If you want to do the visualization, do the followings:
+ After done optimization, go back to the hyperparameter setting, change the paramters to optimal values (by removing '#' symbol)
+ Then run the code again, but remember: don't run the optimization section, only run the part before the optimization.
+ After that, you can run the visualization part.
+
+ Reason: In the visualization section, we use Kyy to compute Kff_posterior. Unless we define Kyy again with optimal parameters in 
+ the visualization section, the value of Kyy is still corresponding to the initial values of hyper-parameters, which will cause "sqrt error"
+ when we compute Kff_posterior. By running the code again, we ensure that every covariance matrix is computed with the same optimal hp-parameters. 
+
+"""
 
 ####################  Visualization  ###############################
 ### Prior for f
