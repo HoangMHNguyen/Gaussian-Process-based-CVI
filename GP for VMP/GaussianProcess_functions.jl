@@ -14,7 +14,7 @@ function GP(x_observed, y_observed, x_new, A1, A2, σ_f, l)
     K_η_new = Kff_observation(x_new,A1,A2,σ_f,l); # covariance matrix for new data point
     K_η_cross = K_cross(x_observed,x_new,A1,A2,σ_f,l); # cross-covariance between training and new data points 
 
-    y_observed = reshape(y_observed,N*T);
+    y_observed = vcat(y_observed'...);
     eye_matrix = 1.0* Matrix(I, size(K_η_observed,1),size(K_η_observed,1)); #identity matrix
     predictive_mean = K_η_cross'*inv(K_η_observed + 1e-6*eye_matrix)*y_observed;
     predictive_covmatrix = K_η_new - K_η_cross'*inv(K_η_observed + 1e-6*eye_matrix)*K_η_cross;
