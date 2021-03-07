@@ -40,13 +40,13 @@ function optim_params(η,num_itr,x_observed,y_observed,A1,A2,σ_f_val,l_val)
             K[i,j] = norm(x_observed[:,i] - x_observed[:,j],2)^2; 
         end
     end
-    y_observed = reshape(y_observed,N*T)
+    y_observed_resha = vcat(y_observed'...)
 
     for iter = 1:num_itr
         old_σ_f_val = σ_f_val; #old value of σ_f
         old_l_val = l_val; #old value of l
         grads = gradient(σ_f_val,l_val) do σ_f, l
-            log_mll(K,y_observed, A1, A2, σ_f,l)
+            log_mll(K,y_observed_resha, A1, A2, σ_f,l)
         end
         σ_f_val = σ_f_val .- η*grads[1];
         l_val = l_val .- η*grads[2];
@@ -54,5 +54,5 @@ function optim_params(η,num_itr,x_observed,y_observed,A1,A2,σ_f_val,l_val)
             break;
         end
     end
-    return σ_f_val, l_val, log_mll(K,y_observed, A1, A2, σ_f_val,l_val)
+    return σ_f_val, l_val, log_mll(K,y_observed_resha, A1, A2, σ_f_val,l_val)
 end
