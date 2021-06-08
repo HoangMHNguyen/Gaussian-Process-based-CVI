@@ -1,5 +1,5 @@
 using Pkg
-Pkg.activate("./Thesis_workspace/")
+Pkg.activate("F:/Tue/Thesis/codes/Git_code/Thesis_Hoang/Thesis_workspace/")
 Pkg.instantiate()
 
 using LinearAlgebra, Distributions, Random, Statistics, SpecialFunctions
