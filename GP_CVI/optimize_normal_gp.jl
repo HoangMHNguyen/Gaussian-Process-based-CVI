@@ -72,3 +72,39 @@ function optim_gp(X_obser::Matrix,y_obser::Vector,σ_val::Real,l_val::Vector,η:
 
     return σ_val, l_val, neg_llh(X_obser,y_obser,σ_val,l_val)
 end
+
+function optim_gp_adam(X_obser::Matrix,y_obser::Vector,σ_val::Real,l_val::Real,η::Real,batch_size::Int, epoch::Int)
+    opt = ADAM(η); #adam optimizer
+    N = size(X_obser,2)
+    for i=1:epoch
+        for batch = 1:batch_size:N
+            grads = gradient(σ_val, l_val) do σ, l
+                neg_llh(X_obser[:,batch:(batch+batch_size-1)],y_obser[batch:(batch+batch_size-1)],σ,l)
+            end
+            g = [grads[1];grads[2]]
+            ps = [σ_val;l_val]
+            update!(opt,ps,g);
+            σ_val, l_val = ps[1], ps[2]
+        end
+    end
+    return σ_val, l_val, neg_llh(X_obser,y_obser,σ_val,l_val)
+end
+
+function optim_gp_adam(X_obser::Matrix,y_obser::Vector,σ_val::Real,l_val::Vector,η::Real,batch_size::Int, epoch::Int)
+    opt = ADAM(η); #adam optimizer
+    N = size(X_obser,2)
+    for i=1:epoch
+        for batch = 1:batch_size:N
+            grads = gradient(σ_val, l_val) do σ, l
+                neg_llh(X_obser[:,batch:(batch+batch_size-1)],y_obser[batch:(batch+batch_size-1)],σ,l)
+            end
+            g = [grads[1];grads[2]]
+            ps = [σ_val;l_val]
+            update!(opt,ps,g);
+            σ_val, l_val = ps[1], ps[2:end]
+        end
+    end
+
+    return σ_val, l_val, neg_llh(X_obser,y_obser,σ_val,l_val)
+end
+
