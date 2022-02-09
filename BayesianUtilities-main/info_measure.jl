@@ -7,7 +7,7 @@ end
 
 function bregman_div(x::Array, y::Array, f::Function)
     grad_f = f'(y)
-    f(x) - f(y) - (x-y)'*grad_f
+    f(x) - f(y) - transpose(x-y)*grad_f
 end
 
 # For details check "ENTROPIES AND CROSS-ENTROPIES OF EXPONENTIAL FAMILIES" by Nielsen and Nock
